@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+header {
+  width: 100%;
+  height: 25%;
+}
+
+footer {
+  width: 100%;
+  height: 25%;
+  bottom: 0;
+}
+
+#board {
+  height: 27vw;
+  width: 27vw;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.box {
+  float: left;
+  border: 1px solid black;
+  background-color: D6A2AD;
+  text-align: center;
+}
+
+.box:hover {
+
+  transition: background-color 1s ease;
+  background-color: 2A324B;
+
+}
+
+#scoreBoard {
+  margin-left: auto;
+  margin-right: auto;
+  height: 4.5vw;
+  width: 27vw;
+  background-color: 4A6670;
+}
+
+#options {
+  margin-top: 3vw;
+  height: 4.5vw;
+  width: 27vw;
+  background-color: orange;
+  text-align: center;
+}
+
+#plus {
+  line-height: 4.5vw;
+  float: left;
+  background-color: A0AF84;
+  height: 4.5vw;
+  width: 13.5vw;
+}
+
+#minus {
+  line-height: 4.5vw;
+  float: left;
+  background-color: 668F80;
+  height: 4.5vw;
+  width: 13.5vw;
+}
