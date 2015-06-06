@@ -76,19 +76,33 @@ var game =
         var $div = $('<div class = "box X'+j+' Y'+i+' ambient">');
           if (this.board[j][i] === "x")
             {
-              $x = $('<div class = "x">');
-              $div.append($x);
+              $xcross1 = $('<div class = "xcross1">');
+              $xcross2 = $('<div class = "xcross2">');
+              $div.append($xcross1);
+              $div.append($xcross2);
             }
           else if (this.board[j][i] === "o")
             {
               $o = $('<div class = "o">');
               $div.append($o);
             }
-
-            $slash = ('<div class="slash slash-1"></div>')
-            $slash2 = ('<div class="slash slash-2"></div>')
-            $div.append($slash);
-            $div.append($slash2);
+      if (this.board[j][i] == null)
+          {
+            //If hover and X is to play next then add X hover animation
+            if (this.chooser[0]==="addX")
+              {
+              var $slash = ('<div class="slash slash-1"></div>');
+              var $slash2 = ('<div class="slash slash-2"></div>');
+              $div.append($slash);
+              $div.append($slash2);
+              }
+            //Else if hover and O is to play next then add O hover animation
+            else if (this.chooser[0]==="addO")
+              {
+              var $circleHover = ('<div class="circle"></div>');
+              $div.append($circleHover);
+              }
+          }
 
         var that = this;
         $div.on("click", function()
@@ -100,13 +114,14 @@ var game =
             );
             that.renderBoard();
             that.determineWinner();
+            that.checkIfBoardFull();
           })
 
         $board.append($div);
 
         $('.box').height("calc(100%/"+this.boardSize+")");
         $('.box').width("calc(100%/"+this.boardSize+")");
-      }
+        }
     }
 
   },
@@ -124,6 +139,26 @@ for (var i = 0; i<this.board.length;i+=1)
     this.board[i][j]=null;
   }
 }
+  },
+
+  //Checks if boards is full and if so clears it
+
+  checkIfBoardFull: function() {
+
+  for (var i = 0; i<this.board.length;i+=1)
+  {
+    for (var j = 0; j  <this.board.length; j+=1)
+    {
+      if (this.board[j][i] === null)
+      {
+          return false;
+      }
+    }
+  }
+
+this.clearBoardArray();
+this.renderBoard();
+
   },
   determineWinner: function()
   {
@@ -194,7 +229,9 @@ checkArrayOfThree: function(array)
           }
 
           this.clearBoardArray();
+
           this.renderBoard();
+
           return array[i];
     }
   },

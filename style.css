@@ -85,20 +85,32 @@ footer {
   width: 13.5vw;
 }
 
-.x {
 
+/*The first part of the actual cross placed on the board*/
+.xcross1 {
+position: absolute;
 height: 90%;
-width: 90%;
-margin-left: auto;
-margin-right: auto;
+width: 1vw;
+background-color: 495159;
+margin-left: 45%;
 margin-top: 5%;
-background-color: 2A324B;
+transform: rotate(-45deg);
 
+}
+
+/*The second part of the actual cross placed on the board*/
+.xcross2 {
+position: absolute;
+height: 90%;
+width: 1vw;
+background-color: 495159;
+margin-left: 45%;
+margin-top: 5%;
+transform: rotate(45deg);
 }
 
 
 .o {
-
   height: 90%;
   width: 90%;
   border-radius: 100%;
@@ -113,15 +125,28 @@ background-color: 2A324B;
   position: relative;
 }
 
+
+.circle {
+border: .75vw solid;
+border-color: 495159;
+border-radius: 100%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 25%;
+width: 50%;
+height: 50%;
+opacity: 0;
+}
+
 .slash {
   height: 90%;
-  width: 10%;
+  width: 1vw;
   background-color: 495159;
   position: absolute;
-  z-index: 1;
   opacity: 0;
   margin-left: 45%;
   margin-top: 5%;
+  transition: all .2s ease-in-out;
 }
 
 .slash-1 {
@@ -131,22 +156,52 @@ background-color: 2A324B;
   transform: rotate(45deg);
 }
 
+.ambient {
+
+/*animation: circle 2s ease-out infinite;*/
+
+}
+
+.ambient:hover .circle {
+animation: circle 2s ease-out;
+animation: circle 2s ease-out;
+}
 .ambient:hover .slash-1 {
-  animation: slash1 2s ease-in-out infinite;
+  animation: slash1 2s ease-out;
 }
 .ambient:hover .slash-2 {
-  animation: slash2 2s ease-in-out infinite;
+  animation: slash2 2s ease-out;
+}
+
+@keyframes circle {
+  0% {
+    opacity: 0;
+    width: 50%; height: 50%;
+    margin-top: 25%;
+  }
+  100% {
+    opacity: .75;
+    width: 75%; height: 75%;
+    margin-top: 12.5%;
+  }
+
 }
 
 @keyframes slash1 {
-  to {
-    opacity: 1;
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: .75;
     transform: rotate(225deg);
   }
 }
 @keyframes slash2 {
-  to {
-    opacity: 1;
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: .75;
     transform: rotate(-225deg);
   }
 }
