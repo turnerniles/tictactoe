@@ -2,6 +2,13 @@ $(document).ready(function () {
   game.initiate();
 })
 
+// $('.box').on(click, function () {
+//   var $el = $(this);
+//   var $gameDivs = $("#board > div");
+//   var myIndex = $gameDivs.index($el);
+//   var col = myIndex % game.boardSize;
+//   var row = Math.floor(myIndex / game.boardSize);
+// });
 
 var game =
 {
@@ -40,6 +47,8 @@ var game =
 
   boardSize: 3,
   board: [],
+  playerScore: 0,
+  computerScore: 0,
   chooser: ["addX", "addO"],
   makeBoard: function()
   {
@@ -53,11 +62,10 @@ var game =
               }
         this.board.push(row);
       };
-
   },
   renderBoard: function()
   {
-    this.clearBoard();
+    this.clearBoardDisplay();
     var $board = $('#board');
 
     for(var i = 0; i < this.board.length; i+=1)
@@ -65,18 +73,24 @@ var game =
       for(var j = 0; j < this.board[0].length; j+=1)
       {
 
-        var $div = $('<div class = "box X'+j+' Y'+i+'">');
-
-          if (this.board[j][i] === "o")
+        var $div = $('<div class = "box X'+j+' Y'+i+' ambient">');
+          if (this.board[j][i] === "x")
             {
-              $div.text('o');
+              $x = $('<div class = "x">');
+              $div.append($x);
             }
-          else if (this.board[j][i] === "x")
+          else if (this.board[j][i] === "o")
             {
-                $div.text('x');
+              $o = $('<div class = "o">');
+              $div.append($o);
             }
 
-            var that = this;
+            $slash = ('<div class="slash slash-1"></div>')
+            $slash2 = ('<div class="slash slash-2"></div>')
+            $div.append($slash);
+            $div.append($slash2);
+
+        var that = this;
         $div.on("click", function()
           {
             that.xOrO
@@ -85,6 +99,7 @@ var game =
               $(this).attr('class').split(' ')[2]
             );
             that.renderBoard();
+            that.determineWinner();
           })
 
         $board.append($div);
@@ -95,14 +110,23 @@ var game =
     }
 
   },
-  clearBoard: function()
+  clearBoardDisplay: function()
   {
     var $board = $('#board');
     $board.empty();
   },
+  clearBoardArray: function()
+  {
+for (var i = 0; i<this.board.length;i+=1)
+{
+  for (var j = 0; j <this.board.length; j+=1)
+  {
+    this.board[i][j]=null;
+  }
+}
+  },
   determineWinner: function()
   {
-
 
     var checkHor = [];
     var checkVer = [];
@@ -139,10 +163,8 @@ var game =
             // Check the verticals
           this.checkArrayOfThree(checkVer);
       }
-
           this.checkArrayOfThree(checkDia1);
           this.checkArrayOfThree(checkDia2);
-
   },
 
 checkArrayOfThree: function(array)
@@ -160,10 +182,24 @@ checkArrayOfThree: function(array)
   if (won === true)
   {
     console.log(array[0]);
-  return array[i];
-  }
+        if(array[0]==="x")
+          {
+          this.playerScore +=1;
+          $('#playerScore').text(this.playerScore);
+          }
+        if(array[0]==="o")
+          {
+          this.computerScore +=1;
+          $('#computerScore').text(this.computerScore);
+          }
 
-},
+          this.clearBoardArray();
+          this.renderBoard();
+          return array[i];
+    }
+  },
+
+
   xOrO: function(x,y)
   {
     if (this.chooser[0] === "addX")

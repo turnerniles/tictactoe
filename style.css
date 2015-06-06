@@ -26,24 +26,24 @@ footer {
 
 .box {
   float: left;
-  border: 1px solid black;
+  border: 1px solid white;
   background-color: D6A2AD;
   text-align: center;
 }
 
-.box:hover {
+/*.box:hover {
 
-  transition: background-color 1s ease;
+  transition: background-color 3s ease;
   background-color: 2A324B;
 
-}
+}*/
 
 #scoreBoard {
   margin-left: auto;
   margin-right: auto;
   height: 4.5vw;
   width: 27vw;
-  background-color: 4A6670;
+  text-align: center;
 }
 
 #options {
@@ -51,13 +51,12 @@ footer {
   height: 4.5vw;
   width: 27vw;
   background-color: orange;
-  text-align: center;
 }
 
 #plus {
   line-height: 4.5vw;
   float: left;
-  background-color: A0AF84;
+  background-color: 6EA4BF;
   height: 4.5vw;
   width: 13.5vw;
 }
@@ -65,7 +64,89 @@ footer {
 #minus {
   line-height: 4.5vw;
   float: left;
-  background-color: 668F80;
+  background-color: C2EFEB;
   height: 4.5vw;
   width: 13.5vw;
+}
+
+#playerScore {
+  line-height: 4.5vw;
+  float: left;
+  background-color: C5DECD;
+  height: 4.5vw;
+  width: 13.5vw;
+}
+
+#computerScore {
+  line-height: 4.5vw;
+  float: left;
+  background-color: A1E8CC;
+  height: 4.5vw;
+  width: 13.5vw;
+}
+
+.x {
+
+height: 90%;
+width: 90%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 5%;
+background-color: 2A324B;
+
+}
+
+
+.o {
+
+  height: 90%;
+  width: 90%;
+  border-radius: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  background-color: 2A324B;
+
+}
+
+.ambient {
+  position: relative;
+}
+
+.slash {
+  height: 90%;
+  width: 10%;
+  background-color: 495159;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+  margin-left: 45%;
+  margin-top: 5%;
+}
+
+.slash-1 {
+  transform: rotate(-45deg);
+}
+.slash-2 {
+  transform: rotate(45deg);
+}
+
+.ambient:hover .slash-1 {
+  animation: slash1 2s ease-in-out infinite;
+}
+.ambient:hover .slash-2 {
+  animation: slash2 2s ease-in-out infinite;
+}
+
+@keyframes slash1 {
+  to {
+    opacity: 1;
+    transform: rotate(225deg);
+  }
+}
+@keyframes slash2 {
+  to {
+    opacity: 1;
+    transform: rotate(-225deg);
+  }
 }
