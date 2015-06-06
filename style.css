@@ -4,6 +4,7 @@
   padding: 0;
   font: inherit;
   box-sizing: border-box;
+  color: white;
 }
 
 header {
@@ -38,7 +39,8 @@ footer {
 
 }*/
 
-#scoreBoard {
+#menu {
+  margin-top: 3vw;
   margin-left: auto;
   margin-right: auto;
   height: 4.5vw;
@@ -46,8 +48,44 @@ footer {
   text-align: center;
 }
 
+#scoreText {
+  line-height: 2.25vw;
+  display: inline-block;
+  height: 2.25vw;
+  width: 27vw;
+  background-color: BCD2EE;
+  text-align: center;
+}
+
+#playerScore {
+  display: inline-block;
+  line-height: 4.5vw;
+  float: left;
+  background-color: 413C58;
+  height: 4.5vw;
+  width: 13.5vw;
+}
+
+#computerScore {
+  line-height: 4.5vw;
+  float: left;
+  background-color: 4B4E6D;
+  height: 4.5vw;
+  width: 13.5vw;
+}
+
+#optionsText {
+  display: inline-block;
+  line-height: 2.25vw;
+  height: 2.25vw;
+  width: 27vw;
+  background-color: BCD2EE;
+  text-align: center;
+
+  }
+
 #options {
-  margin-top: 3vw;
+  display: inline-block;
   height: 4.5vw;
   width: 27vw;
   background-color: orange;
@@ -56,7 +94,7 @@ footer {
 #plus {
   line-height: 4.5vw;
   float: left;
-  background-color: 6EA4BF;
+  background-color: 4B4E6D;
   height: 4.5vw;
   width: 13.5vw;
 }
@@ -64,26 +102,12 @@ footer {
 #minus {
   line-height: 4.5vw;
   float: left;
-  background-color: C2EFEB;
+    background-color: 413C58;
   height: 4.5vw;
   width: 13.5vw;
 }
 
-#playerScore {
-  line-height: 4.5vw;
-  float: left;
-  background-color: C5DECD;
-  height: 4.5vw;
-  width: 13.5vw;
-}
 
-#computerScore {
-  line-height: 4.5vw;
-  float: left;
-  background-color: A1E8CC;
-  height: 4.5vw;
-  width: 13.5vw;
-}
 
 
 /*The first part of the actual cross placed on the board*/
@@ -111,14 +135,15 @@ transform: rotate(45deg);
 
 
 .o {
-  height: 90%;
-  width: 90%;
+  border: .75vw solid;
+  border-color: 495159;
   border-radius: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 5%;
-  background-color: 2A324B;
-
+  margin-top: 12.5%;
+  width: 75%;
+  height: 75%;
+  opacity: 1;
 }
 
 .ambient {
@@ -132,10 +157,9 @@ border-color: 495159;
 border-radius: 100%;
 margin-left: auto;
 margin-right: auto;
-margin-top: 25%;
-width: 50%;
-height: 50%;
 opacity: 0;
+width: 0%; height: 0%;
+margin-top: 50%;
 }
 
 .slash {
@@ -163,8 +187,7 @@ opacity: 0;
 }
 
 .ambient:hover .circle {
-animation: circle 2s ease-out;
-animation: circle 2s ease-out;
+animation: circle 1s ease-out infinite;
 }
 .ambient:hover .slash-1 {
   animation: slash1 2s ease-out;
@@ -176,8 +199,8 @@ animation: circle 2s ease-out;
 @keyframes circle {
   0% {
     opacity: 0;
-    width: 50%; height: 50%;
-    margin-top: 25%;
+    width: 0%; height: 0%;
+    margin-top: 50%;
   }
   100% {
     opacity: .75;
