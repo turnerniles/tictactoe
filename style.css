@@ -4,7 +4,9 @@
   padding: 0;
   font: inherit;
   box-sizing: border-box;
-  color: white;
+  color: DADFF7;
+  font-size: 2.5vh;
+
 }
 
 header {
@@ -14,11 +16,12 @@ header {
 
 footer {
   width: 100%;
-  height: 25%;
+  height: 20%;
   bottom: 0;
 }
 
 #board {
+  top: 9ems;
   height: 27vw;
   width: 27vw;
   margin-left: auto;
@@ -39,6 +42,19 @@ footer {
 
 }*/
 
+input[type="text"] {
+float: left;
+color: 495159;
+text-align: center;
+width: 50%;
+border: solid 1px #dcdcdc;
+transition: box-shadow 0.3s, border 0.3s;
+}
+input[type="text"]:focus {
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}
+
 #menu {
   margin-top: 3vw;
   margin-left: auto;
@@ -53,7 +69,7 @@ footer {
   display: inline-block;
   height: 2.25vw;
   width: 27vw;
-  background-color: BCD2EE;
+  background-color: 5A7D7C;
   text-align: center;
 }
 
@@ -79,7 +95,7 @@ footer {
   line-height: 2.25vw;
   height: 2.25vw;
   width: 27vw;
-  background-color: BCD2EE;
+  background-color: 5A7D7C;
   text-align: center;
 
   }
@@ -158,8 +174,8 @@ border-radius: 100%;
 margin-left: auto;
 margin-right: auto;
 opacity: 0;
-width: 0%; height: 0%;
-margin-top: 50%;
+width: 10%; height: 10%;
+margin-top: 45%;
 }
 
 .slash {
@@ -187,25 +203,30 @@ margin-top: 50%;
 }
 
 .ambient:hover .circle {
-animation: circle 1s ease-out infinite;
+animation: circle 4s ease infinite;
 }
 .ambient:hover .slash-1 {
-  animation: slash1 2s ease-out;
+  animation: slash1 4s ease infinite;
 }
 .ambient:hover .slash-2 {
-  animation: slash2 2s ease-out;
+  animation: slash2 4s ease infinite;
 }
 
 @keyframes circle {
   0% {
     opacity: 0;
-    width: 0%; height: 0%;
-    margin-top: 50%;
+    width: 10%; height: 10%;
+    margin-top: 45%;
   }
-  100% {
+  50% {
     opacity: .75;
     width: 75%; height: 75%;
     margin-top: 12.5%;
+  }
+  0% {
+    opacity: 0;
+    width: 10%; height: 10%;
+    margin-top: 45%;
   }
 
 }
@@ -214,17 +235,25 @@ animation: circle 1s ease-out infinite;
   0% {
     opacity: 0;
   }
-  100% {
+  50% {
     opacity: .75;
-    transform: rotate(225deg);
+    transform: rotate(135deg);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-135deg);
   }
 }
 @keyframes slash2 {
   0% {
     opacity: 0;
   }
-  100% {
+  50% {
     opacity: .75;
-    transform: rotate(-225deg);
+    transform: rotate(-135deg);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(135deg);
   }
 }

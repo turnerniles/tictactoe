@@ -2,14 +2,6 @@ $(document).ready(function () {
   game.initiate();
 })
 
-// $('.box').on(click, function () {
-//   var $el = $(this);
-//   var $gameDivs = $("#board > div");
-//   var myIndex = $gameDivs.index($el);
-//   var col = myIndex % game.boardSize;
-//   var row = Math.floor(myIndex / game.boardSize);
-// });
-
 var game =
 {
   initiate: function()
@@ -73,7 +65,7 @@ var game =
       for(var j = 0; j < this.board[0].length; j+=1)
       {
 
-        var $div = $('<div class = "box X'+j+' Y'+i+' ambient">');
+        var $div = $('<div class = "box ambient">');
           if (this.board[j][i] === "x")
             {
               $xcross1 = $('<div class = "xcross1">');
@@ -104,20 +96,27 @@ var game =
               }
           }
 
-        var that = this;
-        $div.on("click", function()
-          {
-            that.xOrO
-            (
-              $(this).attr('class').split(' ')[1],
-              $(this).attr('class').split(' ')[2]
-            );
-            that.renderBoard();
-            that.determineWinner();
-            that.checkIfBoardFull();
-          })
 
+        var that = this;
         $board.append($div);
+
+        if (this.board[j][i] == null)
+        {
+        $div.on("click", function () {
+          var $el = $(this);
+          var $gameDivs = $("#board > div");
+          var myIndex = $gameDivs.index($el);
+          var col = myIndex % game.boardSize;
+          var row = Math.floor(myIndex / game.boardSize);
+          that.xOrO
+                  (
+                    col,row
+                  );
+                  that.renderBoard();
+                  that.determineWinner();
+                  that.checkIfBoardFull();
+        });
+}
 
         $('.box').height("calc(100%/"+this.boardSize+")");
         $('.box').width("calc(100%/"+this.boardSize+")");
@@ -163,6 +162,44 @@ this.renderBoard();
   determineWinner: function()
   {
 
+var getColumn = function (ary, index) {
+ return ary.map(function (row) {
+   return row[index];
+ });
+};
+
+    for (var i=0;i<this.board.length;i+=1) {
+
+
+  var col = getColumn(game.board,i);
+  var row = game.board[i];
+
+  this.checkArrayOfThree(col);
+  this.checkArrayOfThree(row);
+    }
+
+    var nonPrimeDiag = function (ary) {
+ return ary.map(function (row, rowIndex) {
+   return row[(row.length - 1) - rowIndex];
+ });
+};
+
+var nPD = nonPrimeDiag(this.board);
+
+var primeDiag = function (ary) {
+ return ary.map(function (row, rowIndex) {
+   return row[rowIndex];
+ });
+};
+
+var pD = nonPrimeDiag(this.board);
+
+// check the verticals
+this.checkArrayOfThree(nPD);
+this.checkArrayOfThree(pD);
+
+/* Old array getter checker code
+
     var checkHor = [];
     var checkVer = [];
     var checkDia1 = [];
@@ -191,19 +228,14 @@ this.renderBoard();
                   }
 
           }
+          */
 
-          // Check the horizontals. Can refactored into a function
-          this.checkArrayOfThree(checkHor);
 
-            // Check the verticals
-          this.checkArrayOfThree(checkVer);
-      }
-          this.checkArrayOfThree(checkDia1);
-          this.checkArrayOfThree(checkDia2);
   },
 
 checkArrayOfThree: function(array)
 {
+
   var won = true;
   var i = 1;
   while (i<array.length)
@@ -216,7 +248,6 @@ checkArrayOfThree: function(array)
     }
   if (won === true)
   {
-    console.log(array[0]);
         if(array[0]==="x")
           {
           this.playerScore +=1;
@@ -251,14 +282,10 @@ checkArrayOfThree: function(array)
   },
   addX: function(x,y)
   {
-    var x = parseInt(x.split('')[1]);
-    var y = parseInt(y.split('')[1]);
     this.board[x][y] = ("x");
   },
   addO: function(x,y)
   {
-    var x = parseInt(x.split('')[1]);
-    var y = parseInt(y.split('')[1]);
     this.board[x][y] = ("o");
   }
 
