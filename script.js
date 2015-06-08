@@ -10,6 +10,7 @@ $(document).ready(function () {
     game.playerScore = snapshot.val().storedPlayerScore;
     game.computerScore = snapshot.val().storedComputerScore;
     game.board = snapshot.val().storedBoard;
+    game.chooser = snapshot.val().chooser;
     $player1Input.val(snapshot.val().player1);
     $player2Input.val(snapshot.val().player2);
     game.initiate();
@@ -22,7 +23,6 @@ $(document).ready(function () {
 
 var game =
 {
-  chooser: ["addX", "addO"],
   initiate: function()
   {
     console.log("initiate");
@@ -33,13 +33,14 @@ var game =
 
   },
 
-  reset: function()
+  resetGame: function()
   {
   this.boardSize = 3;
   this.playerScore = 0;
   this.computerScore = 0;
   $player1Input.val("");
   $player2Input.val("");
+  game.clearBoardArray();
   game.renderBoard();
   game.storeStuff();
 
@@ -56,6 +57,7 @@ var p2Text = $player2Input.val();
           storedBoard: game.board,
           player1: p1Text,
           player2: p2Text,
+          chooser: game.chooser
           });
 
   },
@@ -279,23 +281,11 @@ checkArrayOfThree: function(array)
           {
           this.playerScore +=1;
           $('#playerScore').text(this.playerScore);
-          // ref.set(
-          //         {storedPlayerScore: game.playerScore,
-          //         storedComputerScore: game.computerScore,
-          //         currentBoardSize: game.boardSize,
-          //         storedBoard: game.board
-          //         });
           }
         if(array[0]==="o")
           {
           this.computerScore +=1;
           $('#computerScore').text(this.computerScore);
-          // ref.set(
-          //       {storedComputerScore: game.computerScore,
-          //       storedPlayerScore: game.playerScore,
-          //       currentBoardSize: game.boardSize,
-          //       storedBoard: game.board
-          //       });
           }
 
           this.clearBoardArray();
@@ -330,8 +320,7 @@ checkArrayOfThree: function(array)
 
 }
 
-//Setup
-
+//Buttons
 
     $('#plus').on("click", function()
       {
@@ -341,7 +330,6 @@ checkArrayOfThree: function(array)
       game.storeStuff();
     })
 
-
     $('#minus').on("click", function()
       {
       game.boardSize-=1;
@@ -349,6 +337,12 @@ checkArrayOfThree: function(array)
       game.renderBoard();
       game.storeStuff();
     })
+
+    $('#resetButton').on("click", function()
+      {
+      game.resetGame();
+    })
+
 
     //Storing Player Name Data
     var $player1Input = $('#player1');
