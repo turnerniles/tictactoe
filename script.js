@@ -1,47 +1,64 @@
+var ref = new Firebase('https://nttictactoe.firebaseio.com/');
+
 $(document).ready(function () {
-  game.initiate();
-})
+
+  // var $player1Input = $('#player1'); //These are defined at the bottom in the input focusout code.
+  // var $player2Input = $('#player2');
+
+  ref.on("value", function(snapshot) {
+    game.boardSize = snapshot.val().currentBoardSize;
+    game.playerScore = snapshot.val().storedPlayerScore;
+    game.computerScore = snapshot.val().storedComputerScore;
+    game.board = snapshot.val().storedBoard;
+    $player1Input.val(snapshot.val().player1);
+    $player2Input.val(snapshot.val().player2);
+    game.initiate();
+
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
+
+});
 
 var game =
 {
+  chooser: ["addX", "addO"],
   initiate: function()
   {
-    this.makeBoard();
+    console.log("initiate");
     this.renderBoard();
 
-    $('#plus').on("click", function()
-      {
-      game.boardSize+=1;
-      this.makeBoard();
-      this.renderBoard();
-    }.bind(this))
-
-    $('#minus').on("click", function()
-      {
-      game.boardSize-=1;
-      this.makeBoard();
-      this.renderBoard();
-    }.bind(this))
+    $('#playerScore').text(game.playerScore);
+    $('#computerScore').text(game.computerScore);
 
   },
+
   reset: function()
   {
+  this.boardSize = 3;
+  this.playerScore = 0;
+  this.computerScore = 0;
+  $player1Input.val("");
+  $player2Input.val("");
+  game.renderBoard();
+  game.storeStuff();
 
   },
-  updateScore: function()
-  {
+  storeStuff: function(){
+
+var p1Text = $player1Input.val();
+var p2Text = $player2Input.val();
+
+    ref.set(
+          {storedComputerScore: game.computerScore,
+          storedPlayerScore: game.playerScore,
+          currentBoardSize: game.boardSize,
+          storedBoard: game.board,
+          player1: p1Text,
+          player2: p2Text,
+          });
 
   },
-  gameOptions: function()
-  {
-
-  },
-
-  boardSize: 3,
-  board: [],
-  playerScore: 0,
-  computerScore: 0,
-  chooser: ["addX", "addO"],
   makeBoard: function()
   {
     this.board = [];
@@ -50,7 +67,7 @@ var game =
         var row = [];
             for (var j = 0; j<this.boardSize; j+=1)
               {
-                row.push(null);
+                row.push("");
               }
         this.board.push(row);
       };
@@ -60,12 +77,12 @@ var game =
     this.clearBoardDisplay();
     var $board = $('#board');
 
-    for(var i = 0; i < this.board.length; i+=1)
+    for(var i = 0; i < this.boardSize; i+=1)
     {
-      for(var j = 0; j < this.board[0].length; j+=1)
+      for(var j = 0; j < this.boardSize; j+=1)
       {
 
-        var $div = $('<div class = "box ambient">');
+        var $div = $('<div class = "box">');
           if (this.board[j][i] === "x")
             {
               $xcross1 = $('<div class = "xcross1">');
@@ -78,7 +95,7 @@ var game =
               $o = $('<div class = "o">');
               $div.append($o);
             }
-      if (this.board[j][i] == null)
+      if (this.board[j][i] == "")
           {
             //If hover and X is to play next then add X hover animation
             if (this.chooser[0]==="addX")
@@ -100,7 +117,7 @@ var game =
         var that = this;
         $board.append($div);
 
-        if (this.board[j][i] == null)
+        if (this.board[j][i] == "")
         {
         $div.on("click", function () {
           var $el = $(this);
@@ -112,9 +129,19 @@ var game =
                   (
                     col,row
                   );
+
+                  // ref.set({currentBoardSize: game.boardSize,
+                  //         storedPlayerScore: game.playerScore,
+                  //         storedComputerScore: game.computerScore,
+                  //         storedBoard: game.board
+                  //         });
+
+
+
                   that.renderBoard();
                   that.determineWinner();
                   that.checkIfBoardFull();
+                  that.storeStuff();
         });
 }
 
@@ -127,7 +154,7 @@ var game =
   clearBoardDisplay: function()
   {
     var $board = $('#board');
-    $board.empty();
+      $board.empty();
   },
   clearBoardArray: function()
   {
@@ -135,7 +162,7 @@ for (var i = 0; i<this.board.length;i+=1)
 {
   for (var j = 0; j <this.board.length; j+=1)
   {
-    this.board[i][j]=null;
+    this.board[i][j]="";
   }
 }
   },
@@ -148,7 +175,7 @@ for (var i = 0; i<this.board.length;i+=1)
   {
     for (var j = 0; j  <this.board.length; j+=1)
     {
-      if (this.board[j][i] === null)
+      if (this.board[j][i] === "")
       {
           return false;
       }
@@ -240,7 +267,7 @@ checkArrayOfThree: function(array)
   var i = 1;
   while (i<array.length)
     {
-        if (array[i] !== array[0] || array[i] === null)
+        if (array[i] !== array[0] || array[i] === "")
         {
           won = false;
         }
@@ -252,11 +279,23 @@ checkArrayOfThree: function(array)
           {
           this.playerScore +=1;
           $('#playerScore').text(this.playerScore);
+          // ref.set(
+          //         {storedPlayerScore: game.playerScore,
+          //         storedComputerScore: game.computerScore,
+          //         currentBoardSize: game.boardSize,
+          //         storedBoard: game.board
+          //         });
           }
         if(array[0]==="o")
           {
           this.computerScore +=1;
           $('#computerScore').text(this.computerScore);
+          // ref.set(
+          //       {storedComputerScore: game.computerScore,
+          //       storedPlayerScore: game.playerScore,
+          //       currentBoardSize: game.boardSize,
+          //       storedBoard: game.board
+          //       });
           }
 
           this.clearBoardArray();
@@ -290,3 +329,45 @@ checkArrayOfThree: function(array)
   }
 
 }
+
+//Setup
+
+
+    $('#plus').on("click", function()
+      {
+      game.boardSize+=1;
+      game.makeBoard();
+      game.renderBoard();
+      game.storeStuff();
+    })
+
+
+    $('#minus').on("click", function()
+      {
+      game.boardSize-=1;
+      game.makeBoard();
+      game.renderBoard();
+      game.storeStuff();
+    })
+
+    //Storing Player Name Data
+    var $player1Input = $('#player1');
+    console.log($player1Input);
+    var $currentInput1 = "";
+    $player1Input.focusout(function(eventObject)
+    {
+    $currentInput = $(this).val();
+    game.storeStuff();
+    console.log($currentInput2);
+
+    });
+
+    var $player2Input = $('#player2');
+    console.log($player1Input);
+    var $currentInput2 = "";
+    $player2Input.focusout(function(eventObject)
+    {
+    $currentInput = $(this).val();
+    game.storeStuff();
+    console.log($currentInput2);
+    });
