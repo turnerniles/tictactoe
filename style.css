@@ -4,21 +4,12 @@
   padding: 0;
   font: inherit;
   box-sizing: border-box;
-  color: white;
-}
-
-header {
-  width: 100%;
-  height: 25%;
-}
-
-footer {
-  width: 100%;
-  height: 25%;
-  bottom: 0;
+  color: DADFF7;
+  font-size: 2.5vh;
 }
 
 #board {
+  margin-top: 12vw;
   height: 27vw;
   width: 27vw;
   margin-left: auto;
@@ -27,20 +18,38 @@ footer {
 
 .box {
   float: left;
+  position: relative;
   border: 1px solid white;
   background-color: D6A2AD;
   text-align: center;
 }
 
-/*.box:hover {
+input[type="text"] {
+float: left;
+color: 495159;
+text-align: center;
+width: 50%;
+border: solid 1px #dcdcdc;
+transition: box-shadow 0.3s, border 0.3s;
+}
+input[type="text"]:focus {
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}
 
-  transition: background-color 3s ease;
-  background-color: 2A324B;
-
-}*/
+#winnerLog {
+  margin-top: 3vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: 5A7D7C;
+  height: 4.5vw;
+  width: 27vw;
+  height: 2.25vw;
+  line-height: 2.25vw;
+  text-align: center;
+}
 
 #menu {
-  margin-top: 3vw;
   margin-left: auto;
   margin-right: auto;
   height: 4.5vw;
@@ -53,7 +62,7 @@ footer {
   display: inline-block;
   height: 2.25vw;
   width: 27vw;
-  background-color: BCD2EE;
+  background-color: 5A7D7C;
   text-align: center;
 }
 
@@ -79,16 +88,14 @@ footer {
   line-height: 2.25vw;
   height: 2.25vw;
   width: 27vw;
-  background-color: BCD2EE;
+  background-color: 5A7D7C;
   text-align: center;
-
   }
 
 #options {
   display: inline-block;
   height: 4.5vw;
   width: 27vw;
-  background-color: orange;
 }
 
 #plus {
@@ -107,8 +114,18 @@ footer {
   width: 13.5vw;
 }
 
+#resetButton {
+  margin-top: 1.25vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: 5A7D7C;
+  height: 4.5vw;
+  width: 27vw;
+  height: 2.25vw;
+  line-height: 2.25vw;
+  text-align: center;
 
-
+}
 
 /*The first part of the actual cross placed on the board*/
 .xcross1 {
@@ -119,7 +136,7 @@ background-color: 495159;
 margin-left: 45%;
 margin-top: 5%;
 transform: rotate(-45deg);
-
+z-index: 1;
 }
 
 /*The second part of the actual cross placed on the board*/
@@ -131,8 +148,8 @@ background-color: 495159;
 margin-left: 45%;
 margin-top: 5%;
 transform: rotate(45deg);
+z-index: 2;
 }
-
 
 .o {
   border: .75vw solid;
@@ -146,11 +163,6 @@ transform: rotate(45deg);
   opacity: 1;
 }
 
-.ambient {
-  position: relative;
-}
-
-
 .circle {
 border: .75vw solid;
 border-color: 495159;
@@ -158,8 +170,8 @@ border-radius: 100%;
 margin-left: auto;
 margin-right: auto;
 opacity: 0;
-width: 0%; height: 0%;
-margin-top: 50%;
+width: 10%; height: 10%;
+margin-top: 45%;
 }
 
 .slash {
@@ -180,32 +192,31 @@ margin-top: 50%;
   transform: rotate(45deg);
 }
 
-.ambient {
-
-/*animation: circle 2s ease-out infinite;*/
-
+.box:hover .circle {
+animation: circle 4s ease infinite;
 }
-
-.ambient:hover .circle {
-animation: circle 1s ease-out infinite;
+.box:hover .slash-1 {
+  animation: slash1 4s ease infinite;
 }
-.ambient:hover .slash-1 {
-  animation: slash1 2s ease-out;
-}
-.ambient:hover .slash-2 {
-  animation: slash2 2s ease-out;
+.box:hover .slash-2 {
+  animation: slash2 4s ease infinite;
 }
 
 @keyframes circle {
   0% {
     opacity: 0;
-    width: 0%; height: 0%;
-    margin-top: 50%;
+    width: 10%; height: 10%;
+    margin-top: 45%;
   }
-  100% {
+  50% {
     opacity: .75;
     width: 75%; height: 75%;
     margin-top: 12.5%;
+  }
+  0% {
+    opacity: 0;
+    width: 10%; height: 10%;
+    margin-top: 45%;
   }
 
 }
@@ -214,17 +225,25 @@ animation: circle 1s ease-out infinite;
   0% {
     opacity: 0;
   }
-  100% {
+  50% {
     opacity: .75;
-    transform: rotate(225deg);
+    transform: rotate(135deg);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(-135deg);
   }
 }
 @keyframes slash2 {
   0% {
     opacity: 0;
   }
-  100% {
+  50% {
     opacity: .75;
-    transform: rotate(-225deg);
+    transform: rotate(-135deg);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(135deg);
   }
 }

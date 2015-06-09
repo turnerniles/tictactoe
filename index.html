@@ -1,17 +1,23 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+
 </head>
 
 <body>
-<header>
 
+<div id="gameContainer">
+<div id ="winnerLog">Let's Play Tic-Tac-Toe</div>
 <div id = "menu">
+  <input id = "player1" type="text" placeholder="Enter Name (X)">
+  <input id = "player2" type="text" placeholder="Enter Name (O)">
   <div id="scoreText">Score</div>
   <div id = "scoreBoard">
-      <div id = "playerScore">0</div>
-      <div id = "computerScore">0</div>
+      <div id = "playerScore"></div>
+      <div id = "computerScore"></div>
   </div>
   <div id="optionsText">Board Size</div>
   <div id = "options">
@@ -19,15 +25,15 @@
       <div id = "minus">-</div>
         </div>
     </div>
-</div>
 
-</header>
+
 
 <div id ="board"></div>
-<footer>
 
+<div id ="resetButton">Reset</div>
 
-</footer>
+</div>
+
 </body>
 
 <script src="script.js"> </script>

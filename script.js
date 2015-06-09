@@ -1,55 +1,72 @@
-$(document).ready(function () {
-  game.initiate();
-})
+var ref = new Firebase('https://nttictactoe.firebaseio.com/');
 
-// $('.box').on(click, function () {
-//   var $el = $(this);
-//   var $gameDivs = $("#board > div");
-//   var myIndex = $gameDivs.index($el);
-//   var col = myIndex % game.boardSize;
-//   var row = Math.floor(myIndex / game.boardSize);
-// });
+$(document).ready(function () {
+
+  // var $player1Input = $('#player1'); //These are defined at the bottom in the input focusout code.
+  // var $player2Input = $('#player2');
+
+//Get data from firebase and declare board object with values based on what is stored
+//in firebase
+  ref.on("value", function(snapshot) {
+    game.boardSize = snapshot.val().currentBoardSize;
+    game.playerScore = snapshot.val().storedPlayerScore;
+    game.computerScore = snapshot.val().storedComputerScore;
+    game.board = snapshot.val().storedBoard;
+    game.chooser = snapshot.val().chooser;
+    $player1Input.val(snapshot.val().player1);
+    $player2Input.val(snapshot.val().player2);
+    game.initiate();
+
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
+
+});
 
 var game =
 {
+  //Render the board and display player names
   initiate: function()
   {
-    this.makeBoard();
+    console.log("initiate");
     this.renderBoard();
 
-    $('#plus').on("click", function()
-      {
-      game.boardSize+=1;
-      this.makeBoard();
-      this.renderBoard();
-    }.bind(this))
-
-    $('#minus').on("click", function()
-      {
-      game.boardSize-=1;
-      this.makeBoard();
-      this.renderBoard();
-    }.bind(this))
+    $('#playerScore').text(game.playerScore);
+    $('#computerScore').text(game.computerScore);
 
   },
-  reset: function()
+//Reset the game
+  resetGame: function()
   {
+  this.clearBoardArray();
+  this.clearBoardDisplay();
+  this.boardSize = 3;
+  this.playerScore = 0;
+  this.computerScore = 0;
+  $player1Input.val("");
+  $player2Input.val("");
+  this.makeBoard();
+  this.storeStuff();
 
   },
-  updateScore: function()
-  {
+  //Store stuff in firebase function
+  storeStuff: function(){
+
+var p1Text = $player1Input.val();
+var p2Text = $player2Input.val();
+
+    ref.set(
+          {storedComputerScore: game.computerScore,
+          storedPlayerScore: game.playerScore,
+          currentBoardSize: game.boardSize,
+          storedBoard: game.board,
+          player1: p1Text,
+          player2: p2Text,
+          chooser: game.chooser
+          });
 
   },
-  gameOptions: function()
-  {
-
-  },
-
-  boardSize: 3,
-  board: [],
-  playerScore: 0,
-  computerScore: 0,
-  chooser: ["addX", "addO"],
+  //Makes a new board. Only used in resets.
   makeBoard: function()
   {
     this.board = [];
@@ -58,22 +75,23 @@ var game =
         var row = [];
             for (var j = 0; j<this.boardSize; j+=1)
               {
-                row.push(null);
+                row.push("");
               }
         this.board.push(row);
       };
   },
+  //Renders the board after starting up and after each turn
   renderBoard: function()
   {
     this.clearBoardDisplay();
     var $board = $('#board');
 
-    for(var i = 0; i < this.board.length; i+=1)
+    for(var i = 0; i < this.boardSize; i+=1)
     {
-      for(var j = 0; j < this.board[0].length; j+=1)
+      for(var j = 0; j < this.boardSize; j+=1)
       {
-
-        var $div = $('<div class = "box X'+j+' Y'+i+' ambient">');
+//If there is an X or O in the array board data then append an X or O to the screen
+        var $div = $('<div class = "box">');
           if (this.board[j][i] === "x")
             {
               $xcross1 = $('<div class = "xcross1">');
@@ -86,7 +104,7 @@ var game =
               $o = $('<div class = "o">');
               $div.append($o);
             }
-      if (this.board[j][i] == null)
+      if (this.board[j][i] == "")
           {
             //If hover and X is to play next then add X hover animation
             if (this.chooser[0]==="addX")
@@ -104,20 +122,37 @@ var game =
               }
           }
 
-        var that = this;
-        $div.on("click", function()
-          {
-            that.xOrO
-            (
-              $(this).attr('class').split(' ')[1],
-              $(this).attr('class').split(' ')[2]
-            );
-            that.renderBoard();
-            that.determineWinner();
-            that.checkIfBoardFull();
-          })
 
+        var that = this;
         $board.append($div);
+
+        if (this.board[j][i] == "")
+        {
+          //Determine what box was clicked in the array and append an X or
+          //O to the DOM
+        $div.on("click", function () {
+          var $el = $(this);
+          var $gameDivs = $("#board > div");
+          var myIndex = $gameDivs.index($el);
+          var col = myIndex % game.boardSize;
+          var row = Math.floor(myIndex / game.boardSize);
+          that.xOrO
+                  (
+                    col,row
+                  );
+
+                  // ref.set({currentBoardSize: game.boardSize,
+                  //         storedPlayerScore: game.playerScore,
+                  //         storedComputerScore: game.computerScore,
+                  //         storedBoard: game.board
+                  //         });
+
+                  that.renderBoard();
+                  that.determineWinner();
+                  that.checkIfBoardFull();
+                  that.storeStuff();
+        });
+}
 
         $('.box').height("calc(100%/"+this.boardSize+")");
         $('.box').width("calc(100%/"+this.boardSize+")");
@@ -125,18 +160,24 @@ var game =
     }
 
   },
+
+  //Clears the DOM display
+
   clearBoardDisplay: function()
   {
     var $board = $('#board');
-    $board.empty();
+      $board.empty();
   },
+
+  //Clear the array containing the board data
+
   clearBoardArray: function()
   {
 for (var i = 0; i<this.board.length;i+=1)
 {
   for (var j = 0; j <this.board.length; j+=1)
   {
-    this.board[i][j]=null;
+    this.board[i][j]="";
   }
 }
   },
@@ -144,12 +185,11 @@ for (var i = 0; i<this.board.length;i+=1)
   //Checks if boards is full and if so clears it
 
   checkIfBoardFull: function() {
-
   for (var i = 0; i<this.board.length;i+=1)
   {
     for (var j = 0; j  <this.board.length; j+=1)
     {
-      if (this.board[j][i] === null)
+      if (this.board[j][i] === "")
       {
           return false;
       }
@@ -160,8 +200,53 @@ this.clearBoardArray();
 this.renderBoard();
 
   },
+
+  //Determine if there is a winner after each move
   determineWinner: function()
   {
+
+var getColumn = function (ary, index) {
+ return ary.map(function (row) {
+   return row[index];
+ });
+};
+
+    for (var i=0;i<this.board.length;i+=1) {
+
+
+  var col = getColumn(game.board,i);
+  var row = game.board[i];
+//Check the verticals and horizontals
+  this.checkArrayOfThree(col);
+  this.checkArrayOfThree(row);
+    }
+
+    var primeDiag = function (ary) {
+     return ary.map(function (row, rowIndex) {
+       return row[rowIndex];
+     });
+    };
+
+    var nonPrimeDiag = function (ary) {
+ return ary.map(function (row, rowIndex) {
+   return row[(row.length - 1) - rowIndex];
+ });
+};
+
+var nPD = nonPrimeDiag(this.board);
+
+var primeDiag = function (ary) {
+ return ary.map(function (row, rowIndex) {
+   return row[rowIndex];
+ });
+};
+
+var pD = primeDiag(this.board);
+//Check the diagonals
+this.checkArrayOfThree(nPD);
+this.checkArrayOfThree(pD);
+
+/* Old array getter checker code
 
     var checkHor = [];
     var checkVer = [];
@@ -191,24 +276,20 @@ this.renderBoard();
                   }
 
           }
+          */
 
-          // Check the horizontals. Can refactored into a function
-          this.checkArrayOfThree(checkHor);
 
-            // Check the verticals
-          this.checkArrayOfThree(checkVer);
-      }
-          this.checkArrayOfThree(checkDia1);
-          this.checkArrayOfThree(checkDia2);
   },
 
+//Check each row, colomn, diagonal to see if there is a winner
 checkArrayOfThree: function(array)
 {
+
   var won = true;
   var i = 1;
   while (i<array.length)
     {
-        if (array[i] !== array[0] || array[i] === null)
+        if (array[i] !== array[0] || array[i] === "")
         {
           won = false;
         }
@@ -216,27 +297,44 @@ checkArrayOfThree: function(array)
     }
   if (won === true)
   {
-    console.log(array[0]);
         if(array[0]==="x")
           {
+            console.log("plusing");
           this.playerScore +=1;
           $('#playerScore').text(this.playerScore);
+          if ($('#player1').val() !== "")
+            {
+          $('#winnerLog').text($('#player1').val() + " wins!");
+            }
+          else {$('#winnerLog').text("X wins!");}
           }
         if(array[0]==="o")
           {
           this.computerScore +=1;
           $('#computerScore').text(this.computerScore);
+          if ($('#player2').val() !== "")
+            {
+          $('#winnerLog').text($('#player2').val() + " wins!");
+            }
+          else {$('#winnerLog').text("O wins!");}
           }
 
           this.clearBoardArray();
 
           this.renderBoard();
 
+          setTimeout(function(){
+
+        $('#winnerLog').text("Let's Play Tic-Tac-Toe!");
+
+      }, 3000);
+
           return array[i];
+
     }
   },
 
-
+//Choose whether to place an X or O depending on whose turn it is
   xOrO: function(x,y)
   {
     if (this.chooser[0] === "addX")
@@ -251,15 +349,52 @@ checkArrayOfThree: function(array)
   },
   addX: function(x,y)
   {
-    var x = parseInt(x.split('')[1]);
-    var y = parseInt(y.split('')[1]);
     this.board[x][y] = ("x");
   },
   addO: function(x,y)
   {
-    var x = parseInt(x.split('')[1]);
-    var y = parseInt(y.split('')[1]);
     this.board[x][y] = ("o");
   }
 
 }
+
+//Buttons
+    $('#plus').on("click", function()
+      {
+      game.boardSize+=1;
+      game.makeBoard();
+      game.renderBoard();
+      game.storeStuff();
+    })
+
+    $('#minus').on("click", function()
+      {
+      game.boardSize-=1;
+      game.makeBoard();
+      game.renderBoard();
+      game.storeStuff();
+    })
+
+    $('#resetButton').on("click", function()
+      {
+      game.resetGame();
+    })
+
+
+    //Storing Player Name Data
+    var $player1Input = $('#player1');
+    var $currentInput1 = "";
+    $player1Input.focusout(function(eventObject)
+    {
+    $currentInput = $(this).val();
+    game.storeStuff();
+
+    });
+
+    var $player2Input = $('#player2');
+    var $currentInput2 = "";
+    $player2Input.focusout(function(eventObject)
+    {
+    $currentInput = $(this).val();
+    game.storeStuff();
+    });
