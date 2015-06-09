@@ -5,6 +5,8 @@ $(document).ready(function () {
   // var $player1Input = $('#player1'); //These are defined at the bottom in the input focusout code.
   // var $player2Input = $('#player2');
 
+//Get data from firebase and declare board object with values based on what is stored
+//in firebase
   ref.on("value", function(snapshot) {
     game.boardSize = snapshot.val().currentBoardSize;
     game.playerScore = snapshot.val().storedPlayerScore;
@@ -23,6 +25,7 @@ $(document).ready(function () {
 
 var game =
 {
+  //Render the board and display player names
   initiate: function()
   {
     console.log("initiate");
@@ -32,19 +35,21 @@ var game =
     $('#computerScore').text(game.computerScore);
 
   },
-
+//Reset the game
   resetGame: function()
   {
+  this.clearBoardArray();
+  this.clearBoardDisplay();
   this.boardSize = 3;
   this.playerScore = 0;
   this.computerScore = 0;
   $player1Input.val("");
   $player2Input.val("");
-  game.clearBoardArray();
-  game.renderBoard();
-  game.storeStuff();
+  this.makeBoard();
+  this.storeStuff();
 
   },
+  //Store stuff in firebase function
   storeStuff: function(){
 
 var p1Text = $player1Input.val();
@@ -61,6 +66,7 @@ var p2Text = $player2Input.val();
           });
 
   },
+  //Makes a new board. Only used in resets.
   makeBoard: function()
   {
     this.board = [];
@@ -74,6 +80,7 @@ var p2Text = $player2Input.val();
         this.board.push(row);
       };
   },
+  //Renders the board after starting up and after each turn
   renderBoard: function()
   {
     this.clearBoardDisplay();
@@ -83,7 +90,7 @@ var p2Text = $player2Input.val();
     {
       for(var j = 0; j < this.boardSize; j+=1)
       {
-
+//If there is an X or O in the array board data then append an X or O to the screen
         var $div = $('<div class = "box">');
           if (this.board[j][i] === "x")
             {
@@ -121,6 +128,8 @@ var p2Text = $player2Input.val();
 
         if (this.board[j][i] == "")
         {
+          //Determine what box was clicked in the array and append an X or
+          //O to the DOM
         $div.on("click", function () {
           var $el = $(this);
           var $gameDivs = $("#board > div");
@@ -138,8 +147,6 @@ var p2Text = $player2Input.val();
                   //         storedBoard: game.board
                   //         });
 
-
-
                   that.renderBoard();
                   that.determineWinner();
                   that.checkIfBoardFull();
@@ -153,11 +160,17 @@ var p2Text = $player2Input.val();
     }
 
   },
+
+  //Clears the DOM display
+
   clearBoardDisplay: function()
   {
     var $board = $('#board');
       $board.empty();
   },
+
+  //Clear the array containing the board data
+
   clearBoardArray: function()
   {
 for (var i = 0; i<this.board.length;i+=1)
@@ -172,7 +185,6 @@ for (var i = 0; i<this.board.length;i+=1)
   //Checks if boards is full and if so clears it
 
   checkIfBoardFull: function() {
-
   for (var i = 0; i<this.board.length;i+=1)
   {
     for (var j = 0; j  <this.board.length; j+=1)
@@ -188,6 +200,8 @@ this.clearBoardArray();
 this.renderBoard();
 
   },
+
+  //Determine if there is a winner after each move
   determineWinner: function()
   {
 
@@ -202,10 +216,16 @@ var getColumn = function (ary, index) {
 
   var col = getColumn(game.board,i);
   var row = game.board[i];
-
+//Check the verticals and horizontals
   this.checkArrayOfThree(col);
   this.checkArrayOfThree(row);
     }
+
+    var primeDiag = function (ary) {
+     return ary.map(function (row, rowIndex) {
+       return row[rowIndex];
+     });
+    };
 
     var nonPrimeDiag = function (ary) {
  return ary.map(function (row, rowIndex) {
@@ -221,9 +241,8 @@ var primeDiag = function (ary) {
  });
 };
 
-var pD = nonPrimeDiag(this.board);
-
-// check the verticals
+var pD = primeDiag(this.board);
+//Check the diagonals
 this.checkArrayOfThree(nPD);
 this.checkArrayOfThree(pD);
 
@@ -262,6 +281,7 @@ this.checkArrayOfThree(pD);
 
   },
 
+//Check each row, colomn, diagonal to see if there is a winner
 checkArrayOfThree: function(array)
 {
 
@@ -279,24 +299,42 @@ checkArrayOfThree: function(array)
   {
         if(array[0]==="x")
           {
+            console.log("plusing");
           this.playerScore +=1;
           $('#playerScore').text(this.playerScore);
+          if ($('#player1').val() !== "")
+            {
+          $('#winnerLog').text($('#player1').val() + " wins!");
+            }
+          else {$('#winnerLog').text("X wins!");}
           }
         if(array[0]==="o")
           {
           this.computerScore +=1;
           $('#computerScore').text(this.computerScore);
+          if ($('#player2').val() !== "")
+            {
+          $('#winnerLog').text($('#player2').val() + " wins!");
+            }
+          else {$('#winnerLog').text("O wins!");}
           }
 
           this.clearBoardArray();
 
           this.renderBoard();
 
+          setTimeout(function(){
+
+        $('#winnerLog').text("Let's Play Tic-Tac-Toe!");
+
+      }, 3000);
+
           return array[i];
+
     }
   },
 
-
+//Choose whether to place an X or O depending on whose turn it is
   xOrO: function(x,y)
   {
     if (this.chooser[0] === "addX")
@@ -321,7 +359,6 @@ checkArrayOfThree: function(array)
 }
 
 //Buttons
-
     $('#plus').on("click", function()
       {
       game.boardSize+=1;
@@ -346,22 +383,18 @@ checkArrayOfThree: function(array)
 
     //Storing Player Name Data
     var $player1Input = $('#player1');
-    console.log($player1Input);
     var $currentInput1 = "";
     $player1Input.focusout(function(eventObject)
     {
     $currentInput = $(this).val();
     game.storeStuff();
-    console.log($currentInput2);
 
     });
 
     var $player2Input = $('#player2');
-    console.log($player1Input);
     var $currentInput2 = "";
     $player2Input.focusout(function(eventObject)
     {
     $currentInput = $(this).val();
     game.storeStuff();
-    console.log($currentInput2);
     });

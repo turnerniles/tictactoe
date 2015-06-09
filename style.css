@@ -37,8 +37,19 @@ input[type="text"]:focus {
   box-shadow: 0 0 5px 1px #969696;
 }
 
-#menu {
+#winnerLog {
   margin-top: 3vw;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: 5A7D7C;
+  height: 4.5vw;
+  width: 27vw;
+  height: 2.25vw;
+  line-height: 2.25vw;
+  text-align: center;
+}
+
+#menu {
   margin-left: auto;
   margin-right: auto;
   height: 4.5vw;
