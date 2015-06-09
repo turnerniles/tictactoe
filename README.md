@@ -45,3 +45,4 @@ Storing the game data on Firebase was the most challenging part of the project. 
 7. When a X or O is sent to the board it appears immediately and does fade-in or animate in.
 8. The determine winner logic checks every row, column and diagonals after every click. Only the rows and columns that contained the box clicked (as well as the diagonals) need to be checked each time.
 9. Add a computer to play as the opponent and toggle off/on the second player.
+10. Winning messages are not stored sent to the server. So the player who loses does not a message that they lost / the other player won.
