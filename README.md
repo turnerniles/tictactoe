@@ -2,13 +2,13 @@
 https://wireframe.cc/HkrVP1 also stored in the Tic Tac Toe Layout.png
 
 ##Technologies Used:
-*HTML
-*CSS
-*Javascript
-*JQuery
-*PureCSS.io
-*Framework
-*Firebase
+* HTML
+* CSS
+* Javascript
+* JQuery
+* PureCSS.io
+* Framework
+* Firebase
 
 ##Approach:
 I approached the project by first creating the game board as a dynamic array that would be generated based off a given board size. By dynamically creating the array, it would be easy to scale. I.e. a larger board size would dynamically create a bigger board.
@@ -20,17 +20,17 @@ In order to check for a win condition, I made functions to check each row, colum
 After completing a playable game, I began storing the objects, board, board size, player names, etc. in Firebase. This allows the game to be stopped mid-game and then picked up in another session at another time  or on another computer as the board will render based off the objects stored in Firebase.
 
 ##Program Functions:
-*Initaite Game: Automatically starts setups up the board, and starts the game.
-*Reset Function: Automatically reset the game upon completion.
-*Scoreboard: Tracks wins of each player.
-*Game Options: Gives player the option to set the board (3x3, 4x4, etc.).
-*Setup Board: Creates a board array based on a given board size.
-*Render Board: Renders the current state of the board to the browser.
-*Store Board: Stores all objects related to game in Firebase.
-*Player Names: Allow the user to input player names and store them.
-*Play: Upon clicking boxes on the board send alternating X's and O's to the respective location in the board array and display them in the DOM.
-*Determine Winner: If there are a number of X's or O's in a row (horizontally, vertically, diagonally) equal to the board size end the game, determine the winner, update the scoreboard and log the winner to the display.
-*Diplay: Display the winner in the display area.
+* Initaite Game: Automatically starts setups up the board, and starts the game.
+* Reset Function: Automatically reset the game upon completion.
+* Scoreboard: Tracks wins of each player.
+* Game Options: Gives player the option to set the board (3x3, 4x4, etc.).
+* Setup Board: Creates a board array based on a given board size.
+* Render Board: Renders the current state of the board to the browser.
+* Store Board: Stores all objects related to game in Firebase.
+* Player Names: Allow the user to input player names and store them.
+* Play: Upon clicking boxes on the board send alternating X's and O's to the respective location in the board array and display them in the DOM.
+* Determine Winner: If there are a number of X's or O's in a row (horizontally, vertically, diagonally) equal to the board size end the game, determine the winner, update the scoreboard and log the winner to the display.
+* Diplay: Display the winner in the display area.
 
 ##Technical Challenges:
 Storing the game data on Firebase was the most challenging part of the project. The game is fully function but there are improvements that can be made as listed below.
