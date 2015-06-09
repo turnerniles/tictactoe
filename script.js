@@ -39,7 +39,6 @@ var game =
   resetGame: function()
   {
   this.clearBoardArray();
-  this.clearBoardDisplay();
   this.boardSize = 3;
   this.playerScore = 0;
   this.computerScore = 0;
