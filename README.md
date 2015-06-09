@@ -13,7 +13,7 @@ https://wireframe.cc/HkrVP1 also stored in the Tic Tac Toe Layout.png
 ##Approach:
 I approached the project by first creating the game board as a dynamic array that would be generated based off a given board size. By dynamically creating the array, it would be easy to scale. I.e. a larger board size would dynamically create a bigger board.
 
-From there storing X's and O's is a matter of pushing X's and O's to the array and then rendering that array to the DOM using jQuery. When a box is clicked in the DOM, an X or O will be sent to the array ////// based on the position of where the box is located on the board. An X or O will then be display in the box clicked in the DOM.  
+From there storing X's and O's is a matter of pushing X's and O's to the array and then rendering that array to the DOM using jQuery. When a box is clicked in the DOM, an X or O will be sent to the array based on the position of where the box is located on the board. An X or O will then be display in the box clicked in the DOM.  
 
 In order to check for a win condition, I made functions to check each row, column and diagonal on the board, the size of which is dependent on the board size.
 
