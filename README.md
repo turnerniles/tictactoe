@@ -6,8 +6,7 @@ https://wireframe.cc/HkrVP1 also stored in the Tic Tac Toe Layout.png
 * CSS
 * Javascript
 * JQuery
-* PureCSS.io
-* Framework
+* PureCSS.io framework
 * Firebase
 
 ##Approach:
